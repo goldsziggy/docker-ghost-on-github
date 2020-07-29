@@ -19,10 +19,13 @@ ENV GIT_EMAIL=$GIT_EMAIL
 
 WORKDIR /app
 
-RUN git config --global user.email "${GIT_EMAIL}" && git config --global user.name "${GIT_NAME}"
-
 RUN npm install -g ghost-static-site-generator
+# RUN git clone https://${GH_PAT}:x-oauth-basic@${GH_REPO} /app
 
-RUN git clone https://${GH_PAT}:x-oauth-basic@${GH_REPO} /app
-
-CMD git checkout master && git pull && git reset --hard origin/master && gssg --domain $GHOST_SERVER_URL --url $REMOTE_URL --dest "/app" && git add . && git commit -am "updated site" && git push
+CMD git config --global user.email "${GIT_EMAIL}" && \
+    git config --global user.name "${GIT_NAME}" &&  \
+    git clone https://${GH_PAT}:x-oauth-basic@${GH_REPO} /app && \
+    gssg --domain $GHOST_SERVER_URL --url $REMOTE_URL --dest "/app" && \
+    git add . && \
+    git commit -am "updated site" && \
+    git push

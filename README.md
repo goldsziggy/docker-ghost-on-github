@@ -2,9 +2,11 @@
 
 This dockerfile will be used my server array to publish the local ghost site to Github Pages. This dockerfile essentially paraterizes the npm package `ghost-static-site-generator` which does the real heavy lifting.
 
-## ARGS
+## ARGS/ENV Variables
 
-| ARG              | Description                                                                   |
+If building from source, you can set the build-args to the following for the image, otherwise simply set them as environment variables.
+
+| ARG/ENV          | Description                                                                   |
 | ---------------- | ----------------------------------------------------------------------------- |
 | GH_PAT           | Your github personal-access-token so the script can push commits to your repo |
 | GH_REPO          | Your github repo that will contain the static site                            |

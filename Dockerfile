@@ -16,16 +16,16 @@ ENV GHOST_SERVER_URL=$GHOST_SERVER_URL
 ENV GIT_NAME=$GIT_NAME
 ENV GIT_EMAIL=$GIT_EMAIL
 
+RUN apt-get update -y
+RUN apt-get -y install rsync
+RUN npm install -g ghost-static-site-generator
+
 
 WORKDIR /app
 
-RUN npm install -g ghost-static-site-generator
+COPY ./ ./
+
 # RUN git clone https://${GH_PAT}:x-oauth-basic@${GH_REPO} /app
 
-CMD git config --global user.email "${GIT_EMAIL}" && \
-    git config --global user.name "${GIT_NAME}" &&  \
-    git clone https://${GH_PAT}:x-oauth-basic@${GH_REPO} /app && \
-    gssg --domain $GHOST_SERVER_URL --url $REMOTE_URL --dest "/app" && \
-    git add . && \
-    git commit -am "updated site" && \
-    git push
+# @TODO: use a script for this, make the commit smart and show the number of updates or something.
+ENTRYPOINT [ "./entrypoint.sh" ]
